@@ -30,7 +30,7 @@ public class MedianOfTwoSortedArrays {
 //            index2--;
 //        }
         if (num % 2 == 1) {
-            
+
             if (nums1[index1] >= nums2[index2]) {
                 return nums2[index2];
             } else {
