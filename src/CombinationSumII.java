@@ -3,13 +3,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-public class CombinationSum {
+public class CombinationSumII {
     List<List<Integer>> result=new ArrayList<>();
     int len=0;
     int[] candidates={};
 
 
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         if(candidates.length==0){
             return result;
         }
@@ -28,8 +28,11 @@ public class CombinationSum {
             return;
         }
         for (int i = start; i < len && res - candidates[i] >= 0; i++) {
+            if(i>start&&candidates[i]==candidates[i-1]) {
+                continue;
+            }
             pre.add(candidates[i]);
-            find(res - candidates[i], i, pre);
+            find(res - candidates[i], i + 1, pre);
             pre.pop();
         }
     }
