@@ -1,4 +1,4 @@
-package kixkstart;
+package kickstart;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
