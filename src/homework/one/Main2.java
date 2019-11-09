@@ -1,7 +1,6 @@
 package homework.one;
 
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 class Main2 {
     public static void main(String args[]) {
