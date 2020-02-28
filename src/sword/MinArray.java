@@ -19,4 +19,30 @@ public class MinArray {
 
     }
     //todo 二分法
+
+    public int minArray1(int[] numbers) {
+        if(numbers==null||numbers.length==0){
+            return 0;
+        }
+        int left=0;
+        int right=numbers.length-1;
+        return helper(numbers,left,right);
+
+
+    }
+
+    private int helper(int[] numbers,int left,int right){
+        if(left==right){
+            return numbers[left];
+        }
+        int middle=(right-left)/2+left;
+        if(numbers[middle]<numbers[right]){
+            right=middle;
+        }else if(numbers[middle]>numbers[right]){
+            left=middle+1;
+        }else{
+            right--;
+        }
+        return helper(numbers,left,right);
+    }
 }
