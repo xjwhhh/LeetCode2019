@@ -1,78 +1,33 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MergeIntervals {
-    //wrong,类似[[1,4],[5,6]]的话，4，5之间有空隙，不能连在一起
-//    public int[][] merge(int[][] intervals) {
-//        int min = Integer.MAX_VALUE;
-//        int max = Integer.MIN_VALUE;
-//        for (int i = 0; i < intervals.length; i++) {
-//            if (intervals[i][0] < min) {
-//                min = intervals[i][0];
-//            }
-//            if (intervals[i][1] > max) {
-//                max = intervals[i][1];
-//            }
-//
-//        }
-//        boolean[] board = new boolean[max - min + 1];
-//        // System.out.println(board.length);
-//        Arrays.fill(board, false);
-//        for (int i = 0; i < intervals.length; i++) {
-//            int low = intervals[i][0] - min;
-//            int high = intervals[i][1] - min;
-//            // System.out.println(low);
-//            // System.out.println(high);
-//            for (int j = low; j <= high; j++) {
-//                board[j] = true;
-//            }
-//
-//        }
-//        for (int i = 0; i < board.length; i++) {
-//            System.out.println(i + ":" + board[i]);
-//
-//
-//        }
-//        List<List<Integer>> list = new ArrayList<>();
-//        int start = 0;
-//        boolean end = true;
-//        for (int i = 0; i < board.length; i++) {
-//            System.out.println(i + ":" + board[i]);
-//
-//
-//            System.out.println(end);
-//
-//
-//            if ((!board[i] || i == board.length - 1) && !end) {
-//
-//                List<Integer> temp = new ArrayList<>();
-//                temp.add(start + min);
-//                if (i == board.length - 1) {
-//                    temp.add(i + min);
-//                } else {
-//                    temp.add(i - 1 + min);
-//                }
-//                list.add(temp);
-//                end = true;
-//                System.out.println(start + min);
-//                System.out.println(i - 1 + min);
-//                // continue;
-//            } else if (board[i]) {
-//                if (end) {
-//                    start = i;
-//                    end = false;
-//                }
-//            }
-//        }
-//
-//        int[][] result = new int[list.size()][2];
-//        for (int i = 0; i < list.size(); i++) {
-//            int[] temp = {list.get(i).get(0), list.get(i).get(1)};
-//            result[i] = temp;
-//        }
-//        return result;
-//
-//    }
+    public int[][] merge(int[][] intervals) {
+        List<int[]> result=new ArrayList<>();
+        if(intervals==null||intervals.length==0||intervals[0].length==0){
+            return new int[0][0];
+        }
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o2[0]-o1[0];
+            }
+        });
+        int[] save=intervals[0];
+        result.add(save);
+        for(int i=1;i<intervals.length;i++){
+            int[] scan=intervals[i];
+            if(scan[0]<=save[1]){
+                save[1]=Math.max(save[1],scan[1]);
+            }else{
+                save=scan;
+                result.add(save);
+            }
+        }
+        if(!result.contains(save)){
+            result.add(save);
+        }
+        return result.toArray(new int[result.size()][]);
+
+
+    }
 }
