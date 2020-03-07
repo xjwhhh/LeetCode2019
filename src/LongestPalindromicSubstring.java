@@ -1,82 +1,59 @@
+/**
+ * @Author JiaWei Xu
+ * @Date 2020-02-29 10:54
+ * @Email xjwhhh233@outlook.com
+ */
 public class LongestPalindromicSubstring {
-    public String longestPalindrome(String s) {
-        if(s==null||s.length()==0){
-            return " ";
-        }
-        int start=0;
-        int end=0;
-        for(int i=0;i<s.length();i++){
-            int len1=helper(s,i,i);
-            int len2=helper(s,i,i+1);
-            int len=Math.max(len1,len2);
-            if(len>=end-start+1){
-                start=i-(len-1)/2;
-                end=i+len/2;
-            }
-        }
-        return s.substring(start,end+1);
-
-    }
-
-    private int helper(String s,int left,int right){
-        while(left>=0&&right<=s.length()-1){
-            if(s.charAt(left)==s.charAt(right)){
-                left--;
-                right++;
-            }
-        }
-        return right-left-1;
-    }
-
+    //预处理字符串
+    //在每个字符间插入 "#"，在两端分别插入 "^" 和 "$"，这两个字符不会在字符串中出现
+    //这样中心扩展的时候，判断两端字符是否相等的时候，如果到了边界就一定会不相等，跳出循环
+    //并且经过处理，字符串的长度永远都是奇数
     private String preProcess(String s) {
         int n = s.length();
         if (n == 0) {
             return "^$";
         }
-        String ret = "^";
+        StringBuilder ret = new StringBuilder("^");
         for (int i = 0; i < n; i++)
-            ret += "#" + s.charAt(i);
-        ret += "#$";
-        return ret;
+            ret.append("#").append(s.charAt(i));
+        ret.append("#$");
+        return ret.toString();
     }
 
     // 马拉车算法
-    public String longestPalindrome2(String s) {
-        String T = preProcess(s);
-        int n = T.length();
-        int[] P = new int[n];
-        int C = 0, R = 0;
-        for (int i = 1; i < n - 1; i++) {
-            int i_mirror = 2 * C - i;
-            if (R > i) {
-                P[i] = Math.min(R - i, P[i_mirror]);// 防止超出 R
+    public String longestPalindrome(String s) {
+        String str = preProcess(s);
+        int tLen = str.length();
+        int[] max = new int[tLen];// 中心扩展的最大长度
+        int center = 0;// 回文串的中心
+        int radius = 0;// 右半径
+        for (int i = 1; i < tLen - 1; i++) {
+            int i_mirror = 2 * center - i;
+            if (radius > i) {
+                max[i] = Math.min(radius - i, max[i_mirror]);// 防止超出右半径
             } else {
-                P[i] = 0;// 等于 R 的情况
+                max[i] = 0;// 等于右半径的情况
             }
-
-            // 碰到之前讲的三种情况时候，需要利用中心扩展法
-            while (T.charAt(i + 1 + P[i]) == T.charAt(i - 1 - P[i])) {
-                P[i]++;
+            // 中心扩展
+            while (str.charAt(i + 1 + max[i]) == str.charAt(i - 1 - max[i])) {
+                max[i]++;
             }
-
-            // 判断是否需要更新 R
-            if (i + P[i] > R) {
-                C = i;
-                R = i + P[i];
+            // 判断是否需要更新右半径
+            if (i + max[i] > radius) {
+                center = i;
+                radius = i + max[i];
             }
-
         }
-
-        // 找出 P 的最大值
+        // 找出max的最大值
         int maxLen = 0;
         int centerIndex = 0;
-        for (int i = 1; i < n - 1; i++) {
-            if (P[i] > maxLen) {
-                maxLen = P[i];
+        for (int i = 1; i < tLen - 1; i++) {
+            if (max[i] > maxLen) {
+                maxLen = max[i];
                 centerIndex = i;
             }
         }
-        int start = (centerIndex - maxLen) / 2; //最开始讲的求原字符串下标
+        int start = (centerIndex - maxLen) / 2;// 原字符串下标
         return s.substring(start, start + maxLen);
     }
 
