@@ -18,4 +18,6 @@ public class DiameterOfBinaryTree {
         }
         return 1+Math.max(depth(root.left),depth(root.right));
     }
+
+    //获取经过每个根节点的最长路径，用一个全局变量比较并保存
 }
